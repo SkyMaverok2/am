@@ -1,0 +1,402 @@
+﻿// Данные велосипедов
+let bikes = [
+    {
+        id: 1,
+        name: "Городской велосипед",
+        features: "7 скоростей, корзина, алюминиевая рама",
+        priceWeek: 200,
+        priceMonth: 600,
+        available: 5,
+        image: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+    },
+    {
+        id: 2,
+        name: "Горный велосипед",
+        features: "21 скорость, амортизация, дисковые тормоза",
+        priceWeek: 350,
+        priceMonth: 1000,
+        available: 3,
+        image: "https://images.unsplash.com/photo-1511994298241-608e28f14fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+    },
+    {
+        id: 3,
+        name: "Шоссейный велосипед",
+        features: "Легкая карбоновая рама, 18 скоростей",
+        priceWeek: 400,
+        priceMonth: 1200,
+        available: 2,
+        image: "https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+    },
+    {
+        id: 4,
+        name: "Электровелосипед",
+        features: "Мощность 250W, запас хода 60 км",
+        priceWeek: 600,
+        priceMonth: 1800,
+        available: 4,
+        image: "https://images.unsplash.com/photo-1558981852-426c6c22a060?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+    }
+];
+
+
+// Контактные данные
+let contacts = {
+    address: "ул. Флорианская 15, Краков, Польша",
+    phone: "+48 537 755 628",
+    email: "info@velokrak.pl"
+};
+
+
+// Настройки дизайна
+let designSettings = {
+    siteTitle: "Velokrak - Аренда велосипедов в Кракове",
+    mainTitle: "VELOKRAK",
+    titleColor1: "#8a2be2",
+    titleColor2: "#e100ff",
+    heroImage: "https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80",
+    btnColor: "#ffffff",
+    btnGradient1: "#8a2be2",
+    btnGradient2: "#6a1b9a",
+    btnShadow: "rgba(138, 43, 226, 0.4)",
+    bikeTitleColor: "#b388ff"
+};
+
+
+// Загрузка страницы
+document.addEventListener('DOMContentLoaded', function() {
+    renderBikes();
+    updateContactInfo();
+    updateDesignSettings();
+    updateColorPreviews();
+    
+    // Назначение обработчиков событий
+    document.getElementById('admin-btn').addEventListener('click', toggleAdminPanel);
+    document.getElementById('admin-login-btn').addEventListener('click', checkAdminCode);
+    document.getElementById('add-bike-btn').addEventListener('click', addNewBike);
+    document.getElementById('save-contacts-btn').addEventListener('click', saveContacts);
+    document.getElementById('save-design-btn').addEventListener('click', saveDesignSettings);
+    
+    // Обработчики для вкладок админки
+    document.querySelectorAll('.admin-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            switchTab(this.dataset.tab);
+        });
+    });
+    
+    // Обработчик для закрытия модального окна
+    document.querySelector('.close-modal').addEventListener('click', closeModal);
+    
+    // Обновление превью цветов при изменении
+    document.getElementById('edit-title-color1').addEventListener('input', function() {
+        document.getElementById('color-preview1').style.backgroundColor = this.value;
+    });
+    
+    document.getElementById('edit-title-color2').addEventListener('input', function() {
+        document.getElementById('color-preview2').style.backgroundColor = this.value;
+    });
+    
+    document.getElementById('edit-btn-color').addEventListener('input', function() {
+        document.getElementById('color-preview-btn').style.backgroundColor = this.value;
+    });
+    
+    document.getElementById('edit-btn-gradient1').addEventListener('input', function() {
+        document.getElementById('color-preview-btn1').style.backgroundColor = this.value;
+    });
+    
+    document.getElementById('edit-btn-gradient2').addEventListener('input', function() {
+        document.getElementById('color-preview-btn2').style.backgroundColor = this.value;
+    });
+    
+    document.getElementById('edit-btn-shadow').addEventListener('input', function() {
+        document.getElementById('color-preview-btn-shadow').style.backgroundColor = this.value;
+    });
+    
+    document.getElementById('edit-bike-title-color').addEventListener('input', function() {
+        document.getElementById('color-preview-bike-title').style.backgroundColor = this.value;
+    });
+    
+    // Закрытие модального окна при клике вне его
+    window.addEventListener('click', function(event) {
+        if (event.target === document.getElementById('rentModal')) {
+            closeModal();
+        }
+    });
+});
+
+
+// Обновление превью цветов
+function updateColorPreviews() {
+    document.getElementById('color-preview1').style.backgroundColor = designSettings.titleColor1;
+    document.getElementById('color-preview2').style.backgroundColor = designSettings.titleColor2;
+    document.getElementById('color-preview-btn').style.backgroundColor = designSettings.btnColor;
+    document.getElementById('color-preview-btn1').style.backgroundColor = designSettings.btnGradient1;
+    document.getElementById('color-preview-btn2').style.backgroundColor = designSettings.btnGradient2;
+    document.getElementById('color-preview-btn-shadow').style.backgroundColor = designSettings.btnShadow;
+    document.getElementById('color-preview-bike-title').style.backgroundColor = designSettings.bikeTitleColor;
+    
+    // Заполняем значения в форме
+    document.getElementById('edit-title-color1').value = designSettings.titleColor1;
+    document.getElementById('edit-title-color2').value = designSettings.titleColor2;
+    document.getElementById('edit-btn-color').value = designSettings.btnColor;
+    document.getElementById('edit-btn-gradient1').value = designSettings.btnGradient1;
+    document.getElementById('edit-btn-gradient2').value = designSettings.btnGradient2;
+    document.getElementById('edit-btn-shadow').value = designSettings.btnShadow.substring(0, 7);
+    document.getElementById('edit-bike-title-color').value = designSettings.bikeTitleColor;
+}
+
+
+// Отображение велосипедов
+function renderBikes() {
+    const container = document.getElementById('bikes-container');
+    container.innerHTML = '';
+    
+    bikes.forEach(bike => {
+        const bikeCard = document.createElement('div');
+        bikeCard.className = 'bike-card';
+        bikeCard.innerHTML = `
+            <img src="${bike.image}" class="bike-image">
+            <div class="bike-info">
+                <h3 class="bike-title">${bike.name}</h3>
+                <p>${bike.features}</p>
+                <div class="price-container">
+                    <div class="price-item">
+                        <span>Неделя:</span>
+                        <span><strong>${bike.priceWeek} zł</strong></span>
+                    </div>
+                    <div class="price-item">
+                        <span>Месяц:</span>
+                        <span><strong>${bike.priceMonth} zł</strong></span>
+                    </div>
+                </div>
+                <p>Доступно: ${bike.available}</p>
+                <button class="btn rent-btn" data-id="${bike.id}">Арендовать</button>
+            </div>
+        `;
+        container.appendChild(bikeCard);
+    });
+
+
+    // Добавляем обработчики событий для кнопок аренды
+    document.querySelectorAll('.rent-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            openModal();
+        });
+    });
+}
+
+
+// Обновление контактной информации на странице
+function updateContactInfo() {
+    document.getElementById('contact-address').textContent = contacts.address;
+    document.getElementById('contact-phone').innerHTML = `Телефон: <a href="tel:${contacts.phone}">${contacts.phone}</a>`;
+    document.getElementById('contact-email').innerHTML = `Email: <a href="mailto:${contacts.email}">${contacts.email}</a>`;
+    document.getElementById('edit-address').value = contacts.address;
+    document.getElementById('edit-phone').value = contacts.phone;
+    document.getElementById('edit-email').value = contacts.email;
+}
+
+
+// Обновление настроек дизайна
+function updateDesignSettings() {
+    document.getElementById('site-title').textContent = designSettings.siteTitle;
+    document.getElementById('main-title').textContent = designSettings.mainTitle;
+    
+    // Обновляем градиент заголовка
+    document.documentElement.style.setProperty('--title-gradient', 
+        `linear-gradient(90deg, ${designSettings.titleColor1}, ${designSettings.titleColor2})`);
+    
+    // Обновляем фоновое изображение
+    document.documentElement.style.setProperty('--hero-image', `url('${designSettings.heroImage}')`);
+    
+    // Обновляем стили кнопок
+    document.documentElement.style.setProperty('--btn-color', designSettings.btnColor);
+    document.documentElement.style.setProperty('--btn-gradient', 
+        `linear-gradient(135deg, ${designSettings.btnGradient1}, ${designSettings.btnGradient2})`);
+    document.documentElement.style.setProperty('--btn-hover-shadow', designSettings.btnShadow);
+    
+    // Обновляем цвет названий велосипедов
+    document.documentElement.style.setProperty('--bike-title-color', designSettings.bikeTitleColor);
+    
+    // Заполняем форму в админке
+    document.getElementById('edit-site-title').value = designSettings.siteTitle;
+    document.getElementById('edit-main-title').value = designSettings.mainTitle;
+    document.getElementById('edit-hero-image').value = designSettings.heroImage;
+}
+
+
+// Функции модального окна
+function openModal() {
+    document.getElementById('rentModal').style.display = 'flex';
+}
+
+
+function closeModal() {
+    document.getElementById('rentModal').style.display = 'none';
+}
+
+
+// Админ панель
+function toggleAdminPanel() {
+    const panel = document.getElementById('adminPanel');
+    panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+    window.scrollTo(0, document.body.scrollHeight);
+}
+
+
+function checkAdminCode() {
+    const code = document.getElementById('admin-code').value;
+    if (code === '20041108') {
+        document.getElementById('adminLogin').style.display = 'none';
+        document.getElementById('adminContent').style.display = 'block';
+        renderAdminBikesList();
+    } else {
+        alert('Неверный код!');
+    }
+}
+
+
+function switchTab(tabName) {
+    document.querySelectorAll('.admin-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    document.getElementById('admin-bikes-tab').style.display = 'none';
+    document.getElementById('admin-contacts-tab').style.display = 'none';
+    document.getElementById('admin-design-tab').style.display = 'none';
+    
+    if (tabName === 'bikes') {
+        document.querySelector('.admin-tab[data-tab="bikes"]').classList.add('active');
+        document.getElementById('admin-bikes-tab').style.display = 'block';
+    } else if (tabName === 'contacts') {
+        document.querySelector('.admin-tab[data-tab="contacts"]').classList.add('active');
+        document.getElementById('admin-contacts-tab').style.display = 'block';
+    } else {
+        document.querySelector('.admin-tab[data-tab="design"]').classList.add('active');
+        document.getElementById('admin-design-tab').style.display = 'block';
+    }
+}
+
+
+function renderAdminBikesList() {
+    const list = document.getElementById('bikes-list');
+    list.innerHTML = '';
+    
+    bikes.forEach(bike => {
+        const item = document.createElement('div');
+        item.className = 'admin-bike-item';
+        item.innerHTML = `
+            <h3>${bike.name} (ID: ${bike.id})</h3>
+            <input type="text" id="name-${bike.id}" value="${bike.name}">
+            <textarea id="features-${bike.id}">${bike.features}</textarea>
+            <label>Цена за неделю (PLN):</label>
+            <input type="number" id="price-week-${bike.id}" value="${bike.priceWeek}">
+            <label>Цена за месяц (PLN):</label>
+            <input type="number" id="price-month-${bike.id}" value="${bike.priceMonth}">
+            <label>Доступно:</label>
+            <input type="number" id="available-${bike.id}" value="${bike.available}">
+            <label>URL изображения:</label>
+            <input type="text" id="image-${bike.id}" value="${bike.image}">
+            <button class="btn save-bike-btn" data-id="${bike.id}">Сохранить</button>
+            <button class="btn delete-bike-btn" data-id="${bike.id}" style="background: #ff4081; margin-top: 10px;">Удалить</button>
+        `;
+        list.appendChild(item);
+    });
+    
+    // Добавляем обработчики для кнопок сохранения и удаления
+    document.querySelectorAll('.save-bike-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            saveBike(parseInt(this.dataset.id));
+        });
+    });
+    
+    document.querySelectorAll('.delete-bike-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            deleteBike(parseInt(this.dataset.id));
+        });
+    });
+}
+
+
+function saveBike(id) {
+    const bike = bikes.find(b => b.id === id);
+    if (bike) {
+        bike.name = document.getElementById(`name-${id}`).value;
+        bike.features = document.getElementById(`features-${id}`).value;
+        bike.priceWeek = Number(document.getElementById(`price-week-${id}`).value);
+        bike.priceMonth = Number(document.getElementById(`price-month-${id}`).value);
+        bike.available = Number(document.getElementById(`available-${id}`).value);
+        bike.image = document.getElementById(`image-${id}`).value;
+        
+        renderBikes();
+        alert('Изменения сохранены!');
+    }
+}
+
+
+function deleteBike(id) {
+    if (confirm('Вы уверены, что хотите удалить этот велосипед?')) {
+        bikes = bikes.filter(bike => bike.id !== id);
+        renderAdminBikesList();
+        renderBikes();
+        alert('Велосипед удален!');
+    }
+}
+
+
+function addNewBike() {
+    const newId = bikes.length > 0 ? Math.max(...bikes.map(b => b.id)) + 1 : 1;
+    
+    const name = document.getElementById('new-bike-name').value;
+    const features = document.getElementById('new-bike-features').value;
+    const priceWeek = document.getElementById('new-bike-price-week').value;
+    const priceMonth = document.getElementById('new-bike-price-month').value;
+    const available = document.getElementById('new-bike-available').value;
+    const image = document.getElementById('new-bike-image').value;
+    
+    if (!name || !features || !priceWeek || !priceMonth || !available || !image) {
+        alert('Пожалуйста, заполните все поля!');
+        return;
+    }
+    
+    const newBike = {
+        id: newId,
+        name: name,
+        features: features,
+        priceWeek: Number(priceWeek),
+        priceMonth: Number(priceMonth),
+        available: Number(available),
+        image: image
+    };
+    
+    bikes.push(newBike);
+    
+    // Очистка формы
+    document.getElementById('new-bike-name').value = '';
+    document.getElementById('new-bike-features').value = '';
+    document.getElementById('new-bike-price-week').value = '';
+    document.getElementById('new-bike-price-month').value = '';
+    document.getElementById('new-bike-available').value = '';
+    document.getElementById('new-bike-image').value = '';
+    
+    renderAdminBikesList();
+    renderBikes();
+    alert('Новый велосипед добавлен!');
+}
+
+
+function saveContacts() {
+    contacts.address = document.getElementById('edit-address').value;
+    contacts.phone = document.getElementById('edit-phone').value;
+    contacts.email = document.getElementById('edit-email').value;
+    
+    updateContactInfo();
+    alert('Контактные данные сохранены!');
+}
+
+
+function saveDesignSettings() {
+    designSettings.siteTitle = document.getElementById('edit-site-title').value;
+    designSettings.mainTitle = document.getElementById('edit-main-title').value;
+    designSettings.titleColor1 = document.getElementById('edit-title-color1').value;
+    designSettings.titleColor2 = document.getElementById('edit-title-color2').value;
+    designSettings.hero

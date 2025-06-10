@@ -1,0 +1,331 @@
+﻿:root {
+    --primary: #8a2be2;
+    --primary-dark: #6a1b9a;
+    --primary-light: #b388ff;
+    --secondary: #4b0082;
+    --dark: #121212;
+    --darker: #0a0a0a;
+    --light: #f5f5f5;
+    --accent: #ff4081;
+    --neon: #e100ff;
+    --title-gradient: linear-gradient(90deg, var(--primary), var(--neon));
+    --btn-color: white;
+    --btn-gradient: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    --btn-hover-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+    --bike-title-color: var(--primary-light);
+}
+
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--dark);
+    color: var(--light);
+    line-height: 1.6;
+}
+
+
+/* Глобальные стили */
+.gradient-text {
+    background: var(--title-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 700;
+}
+
+
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background: var(--btn-gradient);
+    color: var(--btn-color);
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    margin: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--btn-hover-shadow);
+}
+
+
+/* Стиль для кнопки админ-панели */
+.admin-btn {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    background: rgba(138, 43, 226, 0.2);
+    border: 1px solid var(--primary);
+    margin: 20px auto;
+    display: block;
+    width: fit-content;
+}
+
+
+.admin-btn:hover {
+    background: rgba(138, 43, 226, 0.4);
+}
+
+
+/* Шапка */
+.hero {
+    position: relative;
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+    background: linear-gradient(rgba(18, 18, 18, 0.7), rgba(18, 18, 18, 0.9)), 
+                var(--hero-image, url('https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80')) no-repeat center center/cover;
+}
+
+
+.hero h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+
+/* Велосипеды */
+.bike-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+
+.bike-card {
+    background: #1e1e1e;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s;
+}
+
+
+.bike-card:hover {
+    transform: translateY(-10px);
+}
+
+
+.bike-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+
+.bike-info {
+    padding: 20px;
+}
+
+
+.bike-title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: var(--bike-title-color);
+}
+
+
+.price-container {
+    margin: 15px 0;
+}
+
+
+.price-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+
+/* Контакты и карта */
+.contacts-section {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+
+.map-container {
+    width: 100%;
+    height: 400px;
+    background-color: #333;
+    margin: 20px 0;
+    border-radius: 15px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid var(--primary);
+}
+
+
+.contact-info {
+    margin-top: 30px;
+}
+
+
+.contact-info p {
+    margin: 10px 0;
+    font-size: 1.1rem;
+}
+
+
+/* Модальное окно */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.modal-content {
+    background: #1e1e1e;
+    padding: 30px;
+    border-radius: 15px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    border: 2px solid var(--primary);
+}
+
+
+.close-modal {
+    margin-top: 20px;
+    cursor: pointer;
+    color: var(--primary-light);
+    text-decoration: underline;
+}
+
+
+/* Админ панель */
+.admin-panel {
+    background: #1a1a1a;
+    padding: 30px;
+    margin-top: 50px;
+    border-top: 3px solid var(--primary);
+    display: none;
+}
+
+
+.admin-login {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+
+.admin-login input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #444;
+    background: #333;
+    color: white;
+}
+
+
+.admin-content {
+    display: none;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+
+.admin-bike-item {
+    background: #2a2a2a;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+
+.admin-form {
+    background: #2a2a2a;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+
+.admin-form input,
+.admin-form textarea,
+.admin-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    background: #333;
+    border: 1px solid #444;
+    color: white;
+    border-radius: 5px;
+}
+
+
+.admin-tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #444;
+}
+
+
+.admin-tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+}
+
+
+.admin-tab.active {
+    border-bottom: 2px solid var(--primary);
+    color: var(--primary-light);
+}
+
+
+.color-preview {
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    border: 1px solid #fff;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
+
+.color-input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+
+.color-input-group label {
+    flex: 1;
+}
